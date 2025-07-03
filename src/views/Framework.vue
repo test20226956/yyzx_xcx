@@ -5,9 +5,9 @@
 	  <!-- 首页导航栏 -->
 	  <van-nav-bar v-if="isHome" fixed placeholder>
 	    <!-- 中间标题插槽 -->
-<!-- 	    <template #title>
+      <template #title>
 	      <span style="font-weight: bold;">首页</span>
-	    </template> -->
+	    </template>
 	
 	    <!-- 左侧插槽：放图标和客户名称 -->
 	    <template #left>
