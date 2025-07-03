@@ -1,44 +1,52 @@
 <template>
 	<!-- 这是框架界面 -->
-	<!-- 顶部导航栏 -->
-	<!-- 首页导航栏 -->
-	  <!-- 首页导航栏 -->
-	  <van-nav-bar v-if="isHome" fixed placeholder>
-	    <!-- 中间标题插槽 -->
-      <template #title>
-	      <span style="font-weight: bold;">首页</span>
-	    </template>
-	
-	    <!-- 左侧插槽：放图标和客户名称 -->
-	    <template #left>
-	      <van-image
-			width="50px"
-			height="30px"
-			fit="cover"
-			:src="logo"
-		  ></van-image>
-		  客户名称
-	    </template>
-	
-	    <!-- 右侧插槽（可放多个按钮） -->
-	    <template #right>
-	      <van-icon name="search" size="20" style="margin-right: 12px;" @click="onSearch" />
-	      <van-icon name="setting-o" size="20" @click="onSettings" />
-	    </template>
-	  </van-nav-bar>
-	<!-- 其他导航栏 -->
-	<van-nav-bar v-else :title="pageTitle" />
-	<!-- router -->
-	<div class="router">
-		<router-view></router-view>
-	</div>
-	<!-- 下方菜单 -->
-	<van-tabbar route v-model="active">
-	  <van-tabbar-item icon="home-o" name="Home" replace to="/Framework/Home">首页</van-tabbar-item>
-	  <van-tabbar-item icon="shopping-cart-o" name="Order" replace to="/Framework/Order">点餐</van-tabbar-item>
-	  <van-tabbar-item icon="records-o" name="Nursing" replace to="/Framework/Nursing">护理信息</van-tabbar-item>
-	  <van-tabbar-item icon="contact-o" name="Mine" replace to="/Framework/Mine">个人信息</van-tabbar-item>
-	</van-tabbar>
+  <div class="framework">
+    <!-- 顶部导航栏 -->
+    <div class="navigator">
+      <van-nav-bar :title="pageTitle" fixed style="height: 46px">
+        <!-- 中间标题插槽 -->
+        <template #title>
+          <span style="font-weight: bold;">{{pageTitle}}</span>
+        </template>
+
+        <!-- 左侧插槽：放图标和客户名称 -->
+        <template #left>
+          <van-image
+              width="60px"
+              height="30px"
+              fit="cover"
+              :src="logo"
+          ></van-image>
+        </template>
+
+        <!-- 右侧插槽（可放多个按钮） -->
+        <template #right>
+          <!--  AI聊天 -->
+          <van-icon name="comment-o" size="20" style="margin-right: 12px"/>
+          <!-- 呼叫 -->
+          <van-icon name="service-o" size="20" />
+        </template>
+      </van-nav-bar>
+    </div>
+
+
+    <!-- router -->
+    <div class="router-view-wrapper">
+      <router-view />
+    </div>
+
+
+
+    <!-- 下方菜单 -->
+    <div class="tab-bar">
+      <van-tabbar route v-model="active" style="height: 50px">
+        <van-tabbar-item icon="home-o" name="Home" replace to="/Framework/Home">首页</van-tabbar-item>
+        <van-tabbar-item icon="shopping-cart-o" name="Order" replace to="/Framework/Order">点餐</van-tabbar-item>
+        <van-tabbar-item icon="records-o" name="Nursing" replace to="/Framework/Nursing">护理信息</van-tabbar-item>
+        <van-tabbar-item icon="contact-o" name="Mine" replace to="/Framework/Mine">个人信息</van-tabbar-item>
+      </van-tabbar>
+    </div>
+  </div>
 
 </template>
 
@@ -58,8 +66,6 @@ const titleMap = {
   Mine: '个人信息'
 }
 
-const isHome = computed(() => route.name === 'Home')
-
 // 根据当前路由 name 显示标题
 const pageTitle = computed(() => {
   return titleMap[route.name] || '标题'
@@ -67,7 +73,15 @@ const pageTitle = computed(() => {
 </script>
 
 <style>
-	.router{
+  .framework {
+    width: 390px;
+    height: 844px;
+  }
+
+	.router-view-wrapper{
 		background-color: #f3f4f6;
+    height: calc(100vh - 50px - 46px);
+    overflow-y: auto;
+    margin-top: 46px;
 	}
 </style>

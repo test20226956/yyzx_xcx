@@ -1,20 +1,19 @@
 <template>
     <div id="app">
-      <router-view />
+      <div id="preview-wrapper">
+        <router-view />
+      </div>
     </div>
 </template>
 
 <style>
 
-#app {
-  width: 390px;
-  height: 844px;
-/*  background-color: #fff;
-  border: 1px solid #ccc;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-  overflow: hidden; */
-}
-body{
-	margin: 0;
+html, body, #app {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  width: 100%;
 }
 </style>
+<script setup lang="ts">
+</script>
