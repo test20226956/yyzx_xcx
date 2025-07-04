@@ -15,5 +15,10 @@ html, body, #app {
   width: 100%;
 }
 </style>
-<script setup lang="ts">
+<script setup>
+import axios from 'axios';
+import { provide } from 'vue';
+
+axios.defaults.baseURL = 'http://localhost:9000/'
+provide('axios', axios);
 </script>

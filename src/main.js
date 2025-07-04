@@ -11,7 +11,7 @@ import { ConfigProvider } from "vant";
 const app = createApp(App);
 app.use(ElementPlus)
 app.use(Vant)
-app.use(Vant.Lazyload)
+
 app.use(ConfigProvider)
 app.use(router)
 app.mount('#app')

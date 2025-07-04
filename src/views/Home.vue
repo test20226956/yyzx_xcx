@@ -1,81 +1,79 @@
 <template>
-  <van-pull-refresh>
-    <!-- 滑动 -->
-    <van-swipe
-        class="my-swipe"
-        indicator-color="white"
-        :width="358"
+  <!-- 滑动 -->
+  <van-swipe
+      class="my-swipe"
+      indicator-color="white"
+      :width="358"
+  >
+    <van-swipe-item>1</van-swipe-item>
+    <van-swipe-item>2</van-swipe-item>
+    <van-swipe-item>3</van-swipe-item>
+    <van-swipe-item>4</van-swipe-item>
+  </van-swipe>
+
+  <!-- 下面按钮组 -->
+  <div class="button-group">
+    <van-row :gutter="20" justify="center">
+      <van-col :span="6">
+        <van-button plain hairline type="primary" class="icon-button">
+          <div class="button-content">
+            <el-icon class="button-icon" size="24"><Food /></el-icon>
+            <span class="button-text">点餐</span>
+          </div>
+        </van-button>
+      </van-col>
+      <van-col :span="6">
+        <van-button plain hairline type="primary" class="icon-button">
+          <div class="button-content">
+            <el-icon class="button-icon" size="24"><Phone /></el-icon>
+            <span class="button-text">呼叫</span>
+          </div>
+        </van-button>
+      </van-col>
+      <van-col :span="6">
+        <van-button plain hairline type="primary" class="icon-button">
+          <div class="button-content">
+            <el-icon class="button-icon" size="24"><Tickets /></el-icon>
+            <span class="button-text">护理</span>
+          </div>
+        </van-button>
+      </van-col>
+      <van-col :span="6">
+        <van-button plain hairline type="primary" class="icon-button">
+          <div class="button-content">
+            <el-icon class="button-icon" size="24"><Food /></el-icon>
+            <span class="button-text">点餐</span>
+          </div>
+        </van-button>
+      </van-col>
+    </van-row>
+  </div>
+
+  <!-- 新闻资讯之类的 -->
+  <div class="news">
+    <van-card
+        v-for="(item, index) in activities"
+        :key="index"
+        :title="item.title"
+        class="card"
     >
-      <van-swipe-item>1</van-swipe-item>
-      <van-swipe-item>2</van-swipe-item>
-      <van-swipe-item>3</van-swipe-item>
-      <van-swipe-item>4</van-swipe-item>
-    </van-swipe>
-
-    <!-- 下面按钮组 -->
-    <div class="button-group">
-      <van-row :gutter="20" justify="center">
-        <van-col :span="6">
-          <van-button plain hairline type="primary" class="icon-button">
-            <div class="button-content">
-              <el-icon class="button-icon" size="24"><Food /></el-icon>
-              <span class="button-text">点餐</span>
-            </div>
-          </van-button>
-        </van-col>
-        <van-col :span="6">
-          <van-button plain hairline type="primary" class="icon-button">
-            <div class="button-content">
-              <el-icon class="button-icon" size="24"><Phone /></el-icon>
-              <span class="button-text">呼叫</span>
-            </div>
-          </van-button>
-        </van-col>
-        <van-col :span="6">
-          <van-button plain hairline type="primary" class="icon-button">
-            <div class="button-content">
-              <el-icon class="button-icon" size="24"><Tickets /></el-icon>
-              <span class="button-text">护理</span>
-            </div>
-          </van-button>
-        </van-col>
-        <van-col :span="6">
-          <van-button plain hairline type="primary" class="icon-button">
-            <div class="button-content">
-              <el-icon class="button-icon" size="24"><Food /></el-icon>
-              <span class="button-text">点餐</span>
-            </div>
-          </van-button>
-        </van-col>
-      </van-row>
-    </div>
-
-    <!-- 新闻资讯之类的 -->
-    <div class="news">
-      <van-card
-          v-for="(item, index) in activities"
-          :key="index"
-          :title="item.title"
-          class="card"
-      >
-        <template #desc>
-          <div class="card-description">
-            {{item.description}}
-          </div>
-        </template>
-        <template #num>
-          <div class="card-time">
-            {{item.location}}
-          </div>
-        </template>
-        <template #price>
-          <div class="card-location">
-            {{item.time}}
-          </div>
-        </template>
-      </van-card>
-    </div>
-  </van-pull-refresh>
+      <template #desc>
+        <div class="card-description">
+          {{item.description}}
+        </div>
+      </template>
+      <template #num>
+        <div class="card-time">
+          {{item.location}}
+        </div>
+      </template>
+      <template #price>
+        <div class="card-location">
+          {{item.time}}
+        </div>
+      </template>
+    </van-card>
+  </div>
 </template>
 
 <script setup>

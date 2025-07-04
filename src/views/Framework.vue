@@ -29,13 +29,14 @@
       </van-nav-bar>
     </div>
 
+    <div style="height: 3rem; background-color: #f3f4f6;"></div>
 
     <!-- router -->
     <div class="router-view-wrapper">
       <router-view />
     </div>
 
-
+    <div style="height: 3rem; background-color: #f3f4f6;"></div>
 
     <!-- 下方菜单 -->
     <div class="tab-bar">
@@ -76,12 +77,14 @@ const pageTitle = computed(() => {
   .framework {
     width: 390px;
     height: 844px;
+    box-sizing: border-box;
   }
 
 	.router-view-wrapper{
 		background-color: #f3f4f6;
-    height: calc(100vh - 50px - 46px);
+    /*height: calc(100vh - 50px - 46px);*/
     overflow-y: auto;
-    margin-top: 46px;
+    /*margin-top: 46px;*/
+    height: 748px;
 	}
 </style>
