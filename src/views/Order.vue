@@ -1,70 +1,70 @@
 <template>
-  <div class="page">
-    <div class="top-tab">
-      <!-- 上面是选择早中晚 -->
-      <van-tabs v-model:active="activeTimeType" @change="onTimeTypeChange" class="tab-bar">
-        <van-tab v-for="item in timeTypes">
-          <template #title>{{item.name}}</template>
-        </van-tab>
-      </van-tabs>
-      <!-- 搜索部分 -->
-      <van-search
-          v-model="searchedMealName"
-          shape="round"
-          placeholder="请输入菜品关键词"
-          @search="onSearchMeal"
-          @cancel="onCancelSearch"
-      />
-      <div class="main-content">
-        <!-- 侧边导航栏 -->
-        <div class="meal-sidebar">
-          <van-sidebar v-model="activeMealType" @change="onMealTypeChange">
-            <van-sidebar-item
-                v-for="(item, index) in mealTypes"
-                :title="item.name"
-                :key="item.value"
-            >
-            </van-sidebar-item>
-          </van-sidebar>
-        </div>
+<!--  <div class="page">-->
+<!--    <div class="top-tab">-->
+<!--      &lt;!&ndash; 上面是选择早中晚 &ndash;&gt;-->
+<!--      <van-tabs v-model:active="activeTimeType" @change="onTimeTypeChange" class="tab-bar">-->
+<!--        <van-tab v-for="item in timeTypes">-->
+<!--          <template #title>{{item.name}}</template>-->
+<!--        </van-tab>-->
+<!--      </van-tabs>-->
+<!--      &lt;!&ndash; 搜索部分 &ndash;&gt;-->
+<!--      <van-search-->
+<!--          v-model="searchedMealName"-->
+<!--          shape="round"-->
+<!--          placeholder="请输入菜品关键词"-->
+<!--          @search="onSearchMeal"-->
+<!--          @cancel="onCancelSearch"-->
+<!--      />-->
+<!--      <div class="main-content">-->
+<!--        &lt;!&ndash; 侧边导航栏 &ndash;&gt;-->
+<!--        <div class="meal-sidebar">-->
+<!--          <van-sidebar v-model="activeMealType" @change="onMealTypeChange">-->
+<!--            <van-sidebar-item-->
+<!--                v-for="(item, index) in mealTypes"-->
+<!--                :title="item.name"-->
+<!--                :key="item.value"-->
+<!--            >-->
+<!--            </van-sidebar-item>-->
+<!--          </van-sidebar>-->
+<!--        </div>-->
 
-        <!-- 右侧菜品列表 -->
-        <div class="meal-card" ref="scrollWrapper">
-          <div
-              v-for="(sortedList, index) in sortedMealList"
-              :key="sortedList.type"
-              :ref="el => { if (el) sectionRefs[index] = el }"
-              class="meal-section"
-          >
-            <!--                <h3>{{mealTypes[sortedMealList.type].name}}</h3>-->
-            <van-card
-                v-for="(meal, index) in sortedList.meals"
-                :key="index"
-                :title="meal.name"
-                class="card"
-            >
-            </van-card>
-          </div>
-        </div>
-      </div>
+<!--        &lt;!&ndash; 右侧菜品列表 &ndash;&gt;-->
+<!--        <div class="meal-card" ref="scrollWrapper">-->
+<!--          <div-->
+<!--              v-for="(sortedList, index) in sortedMealList"-->
+<!--              :key="sortedList.type"-->
+<!--              :ref="el => { if (el) sectionRefs[index] = el }"-->
+<!--              class="meal-section"-->
+<!--          >-->
+<!--            &lt;!&ndash;                <h3>{{mealTypes[sortedMealList.type].name}}</h3>&ndash;&gt;-->
+<!--            <van-card-->
+<!--                v-for="(meal, index) in sortedList.meals"-->
+<!--                :key="index"-->
+<!--                :title="meal.name"-->
+<!--                class="card"-->
+<!--            >-->
+<!--            </van-card>-->
+<!--          </div>-->
+<!--        </div>-->
+<!--      </div>-->
 
-      <!-- ai助手浮动气泡 -->
-      <van-floating-bubble
-          v-model:offset="floatOffset"
-          axis="xy"
-          icon="chat"
-          magnetic="x"
-          @offset-change="floatOffsetChange"
-      />
-    </div>
+<!--      &lt;!&ndash; ai助手浮动气泡 &ndash;&gt;-->
+<!--      <van-floating-bubble-->
+<!--          v-model:offset="floatOffset"-->
+<!--          axis="xy"-->
+<!--          icon="chat"-->
+<!--          magnetic="x"-->
+<!--          @offset-change="floatOffsetChange"-->
+<!--      />-->
+<!--    </div>-->
 
-    <div class="bottom-bar">
-      <!-- 点单的actionbar -->
-      <van-action-bar class="action-bar">
-        <van-action-bar-button type="primary" text="选好了" @click="onClickButton" class="action-bar-button"/>
-      </van-action-bar>
-    </div>
-  </div>
+<!--    <div class="bottom-bar">-->
+<!--      &lt;!&ndash; 点单的actionbar &ndash;&gt;-->
+<!--      <van-action-bar class="action-bar">-->
+<!--        <van-action-bar-button type="primary" text="选好了" @click="onClickButton" class="action-bar-button"/>-->
+<!--      </van-action-bar>-->
+<!--    </div>-->
+<!--  </div>-->
 
 </template>
 
@@ -72,7 +72,7 @@
 import {inject, nextTick, onMounted, ref, watch} from "vue";
 import {dayjs} from "element-plus";
 import {showToast} from "vant";
-import BScroll from "@better-scroll/core";
+// import BScroll from "@better-scroll/core";
 
 //======================变量============================
 

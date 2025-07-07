@@ -38,13 +38,11 @@ const routes = [
 				path: '/Framework/Nursing',
 				name: 'Nursing',
 				component: Nursing,
-				children:[
-					{
-						path: '/Framework/Nursing/Record',
-						name: 'Record',
-						component: Record
-					},
-				]
+			},
+			{
+				path: '/Framework/Record',
+				name: 'Record',
+				component: Record
 			},
 			{
 				path: '/Framework/Mine',
@@ -56,8 +54,8 @@ const routes = [
 ]
 
 const router = createRouter({
-	history: createWebHashHistory(),
-	routes
+  history: createWebHashHistory(),
+  routes
 })
 
 export default router

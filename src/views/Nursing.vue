@@ -11,7 +11,7 @@
     >
       <van-cell
           v-for="item in proList"
-          :key="item.id || item.userCode + item.name"
+          :key="item.name"
           :title="item.name"
           :label="item.description"
           is-link
@@ -20,20 +20,22 @@
         <template #value>
           <van-tag
               plain
-              :type="item.state === '数量正常' ? 'success' : 'primary'"
+              :type="item.state === '数量正常' ? 'success' : 'danger' "
           >
             {{ item.state }}
           </van-tag>
           <van-tag
               plain
-              :type="item.timeStatus === '数量正常' ? 'success' : 'primary'"
+              :type="item.timeStatus === '未到期' ? 'success' : 'danger'"
           >
             {{ item.timeStatus }}
           </van-tag>
         </template>
       </van-cell>
     </van-list>
+    <router-view />
   </div>
+
 </template>
 
 <script setup>
@@ -46,54 +48,31 @@ const router = useRouter();
 const axios = inject('axios');
 
 const finished = ref(false)
-const proList = ref([
-  {
-    id: 1,
-    name: '项目1',
-    description: '项目描述1',
-    state: '数量正常',
-    timeStatus: '数量正常'
-  },
-  {
-    id: 2,
-    name: '项目2',
-    description: '项目描述2',
-    state: '数量正常',
-    timeStatus: '数量正常'
-  },
-  {
-    id: 3,
-    name: '项目3',
-    description: '项目描述3',
-  }
-]);
+const proList = ref([]);
 const searchValue = ref('');
 
 const init = () => {
-  let custId = 1 ;
-  let url = 'UerController//clientShowCustPro';
-  axios.get(url, {
-    params: {
-      customerId: custId
-    }
-  }).then(res => {
+  let custId = 25 ;
+  let url = 'UserController/clientShowCustPro';
+  const data = {
+    customerId: custId
+  };
+  axios.get(url,{ params: data }).then(res => {
     let rb = res.data
-    if (rb.code == 200) {
-      let data = rb.data
-      if(data.state == 500){
-        proList.value = data.data
-        finished.value = true
-      }else{
-        ElMessage.error(data.msg)
-      }
+    if (rb.status == 200) {
+      proList.value = rb.data
+      console.log(proList.value)
+      finished.value = true
+    }else{
+      ElMessage.error(rb.msg)
     }
   })
 };
 init();
 
 const searchPro = () => {
-  let custId = 1 ;
-  let url = 'UerController/clientSearchCustPro';
+  let custId = 25 ;
+  let url = 'UserController/clientSearchCustPro';
   axios.get(url, {
     params: {
       customerId: custId,
@@ -101,21 +80,18 @@ const searchPro = () => {
     }
   }).then(res => {
     let rb = res.data
-    if (rb.code == 200) {
-      let data = rb.data
-      if(data.state == 500){
-        proList.value = data.data
-        finished.value = true
-      }else {
-        ElMessage.error(data.msg)
-      }
+    if (rb.status == 200) {
+      proList.value = rb.data
+      finished.value = true
+    }else {
+      ElMessage.error(rb.msg)
     }
   })
 }
 
 const goToRecord = (item) => {
   router.push({
-    path: '/Framework/Nursing/Record',
+    path: '/Framework/Record',
     query: {
       item: encodeURIComponent(JSON.stringify(item))
     }
