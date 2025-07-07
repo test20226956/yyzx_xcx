@@ -1,70 +1,90 @@
 <template>
-<!--  <div class="page">-->
-<!--    <div class="top-tab">-->
-<!--      &lt;!&ndash; 上面是选择早中晚 &ndash;&gt;-->
-<!--      <van-tabs v-model:active="activeTimeType" @change="onTimeTypeChange" class="tab-bar">-->
-<!--        <van-tab v-for="item in timeTypes">-->
-<!--          <template #title>{{item.name}}</template>-->
-<!--        </van-tab>-->
-<!--      </van-tabs>-->
-<!--      &lt;!&ndash; 搜索部分 &ndash;&gt;-->
-<!--      <van-search-->
-<!--          v-model="searchedMealName"-->
-<!--          shape="round"-->
-<!--          placeholder="请输入菜品关键词"-->
-<!--          @search="onSearchMeal"-->
-<!--          @cancel="onCancelSearch"-->
-<!--      />-->
-<!--      <div class="main-content">-->
-<!--        &lt;!&ndash; 侧边导航栏 &ndash;&gt;-->
-<!--        <div class="meal-sidebar">-->
-<!--          <van-sidebar v-model="activeMealType" @change="onMealTypeChange">-->
-<!--            <van-sidebar-item-->
-<!--                v-for="(item, index) in mealTypes"-->
-<!--                :title="item.name"-->
-<!--                :key="item.value"-->
-<!--            >-->
-<!--            </van-sidebar-item>-->
-<!--          </van-sidebar>-->
-<!--        </div>-->
+  <div class="page">
+    <div class="top-tab">
+      <!-- 上面是选择早中晚 -->
+      <van-tabs v-model:active="activeTimeType" @change="onTimeTypeChange" class="tab-bar" sticky>
+        <van-tab v-for="item in timeTypes">
+          <template #title>{{item.name}}</template>
+        </van-tab>
+      </van-tabs>
 
-<!--        &lt;!&ndash; 右侧菜品列表 &ndash;&gt;-->
-<!--        <div class="meal-card" ref="scrollWrapper">-->
-<!--          <div-->
-<!--              v-for="(sortedList, index) in sortedMealList"-->
-<!--              :key="sortedList.type"-->
-<!--              :ref="el => { if (el) sectionRefs[index] = el }"-->
-<!--              class="meal-section"-->
-<!--          >-->
-<!--            &lt;!&ndash;                <h3>{{mealTypes[sortedMealList.type].name}}</h3>&ndash;&gt;-->
-<!--            <van-card-->
-<!--                v-for="(meal, index) in sortedList.meals"-->
-<!--                :key="index"-->
-<!--                :title="meal.name"-->
-<!--                class="card"-->
-<!--            >-->
-<!--            </van-card>-->
-<!--          </div>-->
-<!--        </div>-->
-<!--      </div>-->
+      <!-- 搜索部分 -->
+      <van-search
+          v-model="searchedMealName"
+          shape="round"
+          placeholder="请输入菜品关键词"
+          @search="onSearchMeal"
+          @cancel="onCancelSearch"
+          class="search"
+      />
+      <div class="main-content">
+        <!-- 侧边导航栏 -->
+        <div class="meal-sidebar">
+          <van-sidebar v-model="activeMealType" @change="onMealTypeChange">
+            <van-sidebar-item
+                v-for="(item, index) in mealTypes"
+                :title="item.name"
+                :key="item.value"
+            >
+            </van-sidebar-item>
+          </van-sidebar>
+        </div>
 
-<!--      &lt;!&ndash; ai助手浮动气泡 &ndash;&gt;-->
-<!--      <van-floating-bubble-->
-<!--          v-model:offset="floatOffset"-->
-<!--          axis="xy"-->
-<!--          icon="chat"-->
-<!--          magnetic="x"-->
-<!--          @offset-change="floatOffsetChange"-->
-<!--      />-->
-<!--    </div>-->
+        <!-- 右侧菜品列表 -->
+        <div class="meal-card" ref="scrollWrapper">
+          <div ref="scrollWrapperContent">
+            <div
+                v-for="(sortedList, index) in sortedMealList"
+                :key="sortedList.type"
+                :ref="el => setSectionRef(el, index, sortedList.type)"
+                class="meal-section"
+            >
+              <h3 style="margin-left: 70px; margin-bottom: 10px; margin-top: 10px">{{mealTypes[sortedList.type].name}}</h3>
+              <van-card
+                  v-for="(meal, index) in sortedList.meals"
+                  :key="index"
+                  class="card"
+              >
+                <template #title style="height: 20px">
+                  <div class="card-title" style="font-size: 16px; margin: 10px 0 0 0; padding: 0;">
+                    {{meal.name}}
+                  </div>
+                </template>
+                <template #desc>
+                  <div class="card-button" style="margin-left: 70px; margin-top: 30px">
+                    <van-button type="primary" round size="small" @click="addToCart(meal)" v-if="meal.inCart === false">加入购物车</van-button>
+                    <van-stepper v-else theme="round" v-model="meal.quantity" integer min="0" button-size="22" @change="(val) => handleQuantityChange(meal, val)"></van-stepper>
+                  </div>
+                </template>
+                <template #thumb>
+                  <div class="card-img">
+                    {{meal.img}}
+                  </div>
+                </template>
+              </van-card>
+            </div>
+          </div>
+        </div>
+      </div>
 
-<!--    <div class="bottom-bar">-->
-<!--      &lt;!&ndash; 点单的actionbar &ndash;&gt;-->
-<!--      <van-action-bar class="action-bar">-->
-<!--        <van-action-bar-button type="primary" text="选好了" @click="onClickButton" class="action-bar-button"/>-->
-<!--      </van-action-bar>-->
-<!--    </div>-->
-<!--  </div>-->
+
+      <!-- ai助手浮动气泡 -->
+      <van-floating-bubble
+          v-model:offset="floatOffset"
+          axis="xy"
+          icon="chat"
+          magnetic="x"
+          @offset-change="floatOffsetChange"
+      />
+    </div>
+
+    <div class="bottom-bar">
+      <!-- 点单的actionbar -->
+      <van-action-bar class="action-bar">
+        <van-action-bar-button type="primary" text="选好了" @click="onClickButton" class="action-bar-button"/>
+      </van-action-bar>
+    </div>
+  </div>
 
 </template>
 
@@ -72,7 +92,11 @@
 import {inject, nextTick, onMounted, ref, watch} from "vue";
 import {dayjs} from "element-plus";
 import {showToast} from "vant";
-// import BScroll from "@better-scroll/core";
+import BScroll from "@better-scroll/core";
+import MouseWheel from '@better-scroll/mouse-wheel'
+
+// 注册插件
+BScroll.use(MouseWheel)
 
 //======================变量============================
 
@@ -162,55 +186,185 @@ import {showToast} from "vant";
       type: 0,
       meals: [
         {
+          mealId:0,
           name: '肉三鲜饺子',
           img: '',
           type: 0,
           state: 1,
+          quantity: 0,
+          inCart: false,
         },
         {
+          mealId:0,
           name: '肉三鲜饺子',
           img: '',
           type: 0,
           state: 1,
+          quantity: 0,
+          inCart: false,
         },
         {
+          mealId:0,
           name: '肉三鲜饺子',
           img: '',
           type: 0,
           state: 1,
-        }
+          quantity: 0,
+          inCart: false,
+        },
+
       ]
     },
     {
       type: 1,
       meals: [
         {
+          mealId:0,
           name: '肉三鲜饺子',
           img: '',
           type: 1,
           state: 1,
+          quantity: 0,
+          inCart: false,
         },
         {
+          mealId:0,
           name: '肉三鲜饺子',
           img: '',
           type: 1,
           state: 1,
+          quantity: 0,
+          inCart: false,
         },
         {
+          mealId:0,
           name: '肉三鲜饺子',
           img: '',
           type: 1,
           state: 1,
-        }
+          quantity: 0,
+          inCart: false,
+        },
+        {
+          mealId:0,
+          name: '肉三鲜饺子',
+          img: '',
+          type: 1,
+          state: 1,
+          quantity: 0,
+          inCart: false,
+        },
+        {
+          mealId:0,
+          name: '肉三鲜饺子',
+          img: '',
+          type: 1,
+          state: 1,
+          quantity: 0,
+          inCart: false,
+        },
+        {
+          mealId:0,
+          name: '肉三鲜饺子',
+          img: '',
+          type: 1,
+          state: 1,
+          quantity: 0,
+          inCart: false,
+        },
+        {
+          mealId:0,
+          name: '肉三鲜饺子',
+          img: '',
+          type: 1,
+          state: 1,
+          quantity: 0,
+          inCart: false,
+        },
+      ]
+    },
+    {
+      type: 5,
+      meals: [
+        {
+          mealId:0,
+          name: '肉三鲜饺子',
+          img: '',
+          type: 1,
+          state: 1,
+          quantity: 0,
+          inCart: false,
+        },
+        {
+          mealId:0,
+          name: '肉三鲜饺子',
+          img: '',
+          type: 1,
+          state: 1,
+          quantity: 0,
+          inCart: false,
+        },
+        {
+          mealId:0,
+          name: '肉三鲜饺子',
+          img: '',
+          type: 1,
+          state: 1,
+          quantity: 0,
+          inCart: false,
+        },
+        {
+          mealId:0,
+          name: '肉三鲜饺子',
+          img: '',
+          type: 1,
+          state: 1,
+          quantity: 0,
+          inCart: false,
+        },
+        {
+          mealId:0,
+          name: '肉三鲜饺子',
+          img: '',
+          type: 1,
+          state: 1,
+          quantity: 0,
+          inCart: false,
+        },
+        {
+          mealId:0,
+          name: '肉三鲜饺子',
+          img: '',
+          type: 1,
+          state: 1,
+          quantity: 0,
+          inCart: false,
+        },
+        {
+          mealId:0,
+          name: '肉三鲜饺子',
+          img: '',
+          type: 1,
+          state: 1,
+          quantity: 0,
+          inCart: false,
+        },
       ]
     },
   ])
 
+
+  //添加到购物车的菜品
+  const addedMeals = ref([]);
+
   let scrollWrapper = ref(null);
+  let scrollWrapperContent = ref(null);
+  const typeToIndex = ref([]);
   const sectionRefs = ref([]);
   let bScroll;
 
 //======================函数==============================
+
 
 //初始化bscroll
 const initBScroll = () => {
@@ -223,23 +377,33 @@ const initBScroll = () => {
       console.log('scrollWrapper是空！');
       return
     }
-    bScroll = new BScroll(scrollWrapper.value[0], {
-      scrollY: true,
-      probeType: 3,
-    })
-
+    console.log("121");
+    console.log(scrollWrapper.value);
+    try {
+      bScroll = new BScroll(scrollWrapper.value, {
+        scrollY: true,
+        probeType: 3,
+        mouseWheel: true
+      })
+      console.log('BScroll初始化成功')
+      console.log(bScroll)
+    }catch(error) {
+      console.error('BScroll初始化失败:', error)
+    }
+    //console.log('容器高度:', scrollWrapper.value.offsetHeight);
+    //console.log('内容高度:', scrollWrapper.value.scrollHeight);
     bScroll.on('scroll', (pos) => {
       const scrollY = Math.abs(pos.y)
       let currentIndex = 0
-      console.log("111");
-      console.log(sectionRefs);
       // 使用value访问响应式数组
       for (let i = 0; i < sectionRefs.value.length; i++) {
         const el = sectionRefs.value[i]
-        if (!el) continue
+        if (!el) continue;
 
-        if (el.offsetTop <= scrollY) {
-          currentIndex = i
+        if (el.offsetTop <= scrollY ) {
+          //currentIndex = i;
+          // 找到对应的左侧菜单index
+          currentIndex = sortedMealList.value[i].type;
         } else {
           break
         }
@@ -257,8 +421,16 @@ watch(sortedMealList, () => {
 }, { deep: true })
 
 onMounted(() => {
-  initBScroll();
+  setTimeout(initBScroll, 100)
+  //initBScroll();
 })
+
+const setSectionRef = (el, index, type) => {
+  if(el){
+    sectionRefs.value[index] = el;
+    typeToIndex.value[type] = index;
+  }
+}
 
 //****************初始化部分：获取当天有的菜品****************
   //获取，然后按照菜品类型来分类
@@ -293,11 +465,28 @@ onMounted(() => {
   const onTimeTypeChange = () => {
     console.log("时间类型变化，当前时间类型为：" + timeTypes.value[activeTimeType.value].name);
     getMealList();
+    // 还要重置之前点了什么
+    addedMeals.value = [];
   }
 
   // 菜品类型变化
   const onMealTypeChange = () => {
     console.log("菜品类型变化，当前菜品类型为：" + mealTypes.value[activeMealType.value].name);
+    //此时要根据菜品类型来滚动右边
+    //找到真正的sectionRef的index
+    const sectionIndex = typeToIndex.value[activeMealType.value];
+
+    console.log("当前的sectionIndex是："+sectionIndex);
+    if(!BScroll || !sectionRefs.value[sectionIndex]){
+      return;
+    }
+
+    bScroll.scrollToElement(
+        sectionRefs.value[sectionIndex],
+        800,
+        -50,
+        0
+    );
   }
 
   // 悬浮气泡变化
@@ -322,6 +511,23 @@ onMounted(() => {
 
   }
 
+//****************添加购物车****************
+  const addToCart = (meal) => {
+    meal.inCart = true;
+    meal.quantity = 1;
+    console.log(`将${meal.name}加入到购物车！`);
+  }
+
+  //步进器变化
+  const handleQuantityChange = (meal, newQuantity) => {
+    if(newQuantity === 0){
+      meal.inCart = false;
+      meal.quantity = 0;
+    }
+    console.log(newQuantity);
+  }
+
+
 //****************提交部分****************
   // 选好了
   const onClickButton = () => {
@@ -331,14 +537,18 @@ onMounted(() => {
 
 <style>
 .page{
-  height: 748px;
+  height: calc(100vh - 50px - 46px);
+  display: flex;
+  flex-direction: column;
 }
 .top-tab{
   height: 698px;
+  position: relative;
 }
 .top-tab .tab-bar{
   position: fixed;
   top: 46px;
+  width: 390px;
 }
 .bottom-bar{
   position: fixed;
@@ -361,7 +571,7 @@ onMounted(() => {
 }
 
 .main-content{
-  height: 698px;
+  height: 658px;
   display: flex;
   overflow-y: auto;
 }
@@ -369,14 +579,25 @@ onMounted(() => {
   flex-shrink: 0;
   position: fixed;
   width: 60px;
+  top: 106px;
+  z-index: 100;
 }
 .meal-card{
   flex: 1;
-  padding: 16px;
+  padding: 0 16px 0 16px;
   overflow-y: auto;
+  height: 608px;
 }
 .meal-card .card{
   margin-left: 70px;
-  width: 300px;
+  width: 290px;
+}
+:deep(.card .van-card__header .van-card__content){
+  height: 30px;
+}
+
+.search{
+  position: sticky;
+  width: 390px;
 }
 </style>

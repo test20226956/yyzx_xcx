@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@better-scroll/core": "^2.5.1",
+    "@better-scroll/mouse-wheel": "^2.5.1",
     "@vant/touch-emulator": "^1.4.0",
     "axios": "^1.10.0",
     "core-js": "^3.8.3",
