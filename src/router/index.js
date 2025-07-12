@@ -7,7 +7,8 @@ import Nursing from '@/views/Nursing.vue'
 import Mine from '@/views/Mine.vue'
 import Home from '@/views/Home.vue'
 import Record from '@/views/Record.vue'
-
+import OrderHistory from "@/views/OrderHistory.vue";
+import Agent from  '@/views/Agent.vue'
 const routes = [
 	// {
 	//   path: '/',
@@ -49,6 +50,16 @@ const routes = [
 				name: 'Mine',
 				component: Mine
 			},
+			{
+				path: '/Framework/OrderHistory',
+				name: 'OrderHistory',
+				component: OrderHistory
+			},
+			{
+				path: '/Framework/Agent',
+				name: 'Agent',
+				component: Agent
+			}
 		]
 	},
 ]

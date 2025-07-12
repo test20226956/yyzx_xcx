@@ -24,7 +24,7 @@
           <!--  AI聊天 -->
           <van-icon name="comment-o" size="20" style="margin-right: 12px"/>
           <!-- 呼叫 -->
-          <van-icon name="service-o" size="20" />
+          <van-icon name="service-o" size="20" @click="call"/>
         </template>
       </van-nav-bar>
     </div>
@@ -64,13 +64,42 @@ const titleMap = {
   Home: '首页',
   Order: '点餐',
   Nursing: '护理信息',
-  Mine: '个人信息'
+  Mine: '个人信息',
+  Record: '记录详情',
+  Notes: '添加备注',
 }
 
 // 根据当前路由 name 显示标题
 const pageTitle = computed(() => {
   return titleMap[route.name] || '标题'
 })
+
+const call = () => {
+  //获取当天的日期并以字符串连接
+  const custId = 25;
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0'); // 月份从0开始
+  const dd = String(today.getDate()).padStart(2, '0');
+
+  const formattedDate = `${yyyy}-${mm}-${dd}`;
+  console.log(formattedDate);
+
+  const url = `/CustomerController/call?customerId=${custId}&date=${formattedDate}`
+  axios.post( url).then(response => {
+    let rb = response.data;
+    if(rb.status === 200){
+      showToast("已联系您对应的护工");
+    }else{
+      showToast(rb.msg);
+    }
+  })
+}
+
+const goAgent = () => {
+  //跳转页面
+  router.push('/Framework/Agent');
+}
 </script>
 
 <style>

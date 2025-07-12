@@ -19,7 +19,7 @@
           />
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" class="login-btn" @click="onSubmit">
+          <el-button type="primary" class="login-btn" @click="login">
             登录
           </el-button>
         </el-form-item>
@@ -77,9 +77,9 @@ function login() {
     }
 
     // 校验通过后再发送请求
-    const url = 'UserController/login'
+    const url = 'CustomerController/login'
     const data = {
-      account: formData.value.userCode,
+      tel: formData.value.tel,
       password: formData.value.password
     }
 
@@ -94,12 +94,13 @@ function login() {
           if (rb.status === 200) {
             const responseUser = rb.data
             // 保存必要的 session
+            //没有type！！！
             sessionStorage.setItem('type', responseUser.type)
-            sessionStorage.setItem('userName', responseUser.userName)
-            sessionStorage.setItem('userId', responseUser.userId)
+            sessionStorage.setItem('userName', responseUser.name)
+            sessionStorage.setItem('userId', responseUser.customerId)
             sessionStorage.setItem('token', rb.jwt)
             ElMessage.success('登录成功')
-            router.push('/framework/welcome')
+            router.push('/Framework/Home')
           } else {
             ElMessage.error(rb.msg || '登录失败')
           }
