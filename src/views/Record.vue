@@ -31,7 +31,8 @@ init();
 </script>
 
 <template>
-  <!-- 固定顶部的 cell -->
+  <div class="frame">
+<!-- 固定顶部的 cell -->
   <div class="fixed-header">
     <van-cell :key="titleItem.name" :title="titleItem.name" class="cell-header">
       <template #label>
@@ -76,6 +77,8 @@ init();
       </van-cell>
     </van-list>
   </div>
+  </div>
+
 </template>
 
 <style scoped>
@@ -88,11 +91,14 @@ init();
 
 .cell-header {
   height: 120px;
-  margin: 10px;
   padding: 10px !important;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
+  margin-left: 10px;
+  margin-top: 15px;
+  margin-right: 10px;
+  width: 360px;
 }
 
 .scrollable-list {
@@ -104,11 +110,11 @@ init();
   height: 80px;
   box-sizing: border-box;
   margin-bottom: 10px;
-  margin-left: 10px;
   padding: 10px !important;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
+  width: 360px;
 }
 
 /* 通用样式保留 */
@@ -127,5 +133,11 @@ init();
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.frame{
+  width: 375px;
+  margin-left: 5px;
+  margin-top: 10px;
 }
 </style>

@@ -22,7 +22,7 @@
         <!-- 右侧插槽（可放多个按钮） -->
         <template #right>
           <!--  AI聊天 -->
-          <van-icon name="comment-o" size="20" style="margin-right: 12px"/>
+          <van-icon name="comment-o" size="20" style="margin-right: 12px" @click="goAgent"/>
           <!-- 呼叫 -->
           <van-icon name="service-o" size="20" @click="call"/>
         </template>
@@ -53,11 +53,12 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { useRoute } from 'vue-router'
+import {useRoute, useRouter} from 'vue-router'
 import logo from '@/assets/Logo.png'
 
 const active = ref(0)
 const route = useRoute()
+const router = useRouter()
 
 // 动态标题映射
 const titleMap = {
